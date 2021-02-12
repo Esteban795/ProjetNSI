@@ -1,5 +1,5 @@
 from player import Player
-from random import *
+from match import Match,Round
 
 class Tournoi:
     def __init__(self,nombre_joueurs,nom,lieu,date:str,nb_tours=4):
@@ -9,7 +9,9 @@ class Tournoi:
         self.lieu = lieu
         self.date = date
         self.nb_tours = nb_tours
-
+        self.liste_rounds = []
+        self.liste_perdants = []
+    
     def serialize(self):
         return self.__dict__
 
@@ -21,7 +23,7 @@ class Tournoi:
             s = input("Sexe : ")
             ranking = int(input("Classement du joueur : "))
             joueur = Player(lastname,firstname,date,s,ranking)
-            self.liste_joueurs.append(joueur.serialize())
+            self.liste_joueurs.append(joueur)
 
     def afficher_joueurs(self):
         if len(self.liste_joueurs) == 0:
@@ -34,10 +36,18 @@ class Tournoi:
         l = len(self.liste_joueurs)
         sorted_by_rank = sorted(self.liste_joueurs,key=lambda player: player['classement'])
         mid = int(l//2)
-        if l%2 == 0:
-            sup = sorted_by_rank[:mid]
-            inf = sorted_by_rank[mid:]
-        else:
-            sup = sorted_by_rank[:mid + 1]
-            inf = sorted_by_rank[mid + 1:]
-        print(sup,inf)
+        sup = sorted_by_rank[:mid]
+        inf = sorted_by_rank[mid:]
+        liste_matchs = []
+        for i in range(mid):
+            match = Match(sup[i],inf[i])
+            match.resultat(int(input("Indiquez 1 si le joueur 1 a gagné le match, sinon 2. En cas d'égalité, 1/2 : ")))
+            liste_matchs.append(match.serialize())
+        tour = Round(liste_matchs)
+        self.liste_rounds.append(tour.afficher_liste_matchs())
+        matchs_done = tour.afficher_liste_matchs()
+        for i in matchs_done:
+            index_gagnant = i['gagnant']
+            joueur_perdant 
+            
+            
