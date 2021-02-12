@@ -1,2 +1,2 @@
 # ProjetNSI
-A high school project
+A high school chess tournament project
