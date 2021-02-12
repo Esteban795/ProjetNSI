@@ -20,16 +20,24 @@ class Tournoi:
             date = input("Date de naissance : ")
             s = input("Sexe : ")
             ranking = int(input("Classement du joueur : "))
-            print("\n")
-            self.liste_joueurs.append(Player(lastname,firstname,date,s,ranking))
+            joueur = Player(lastname,firstname,date,s,ranking)
+            self.liste_joueurs.append(joueur.serialize())
 
     def afficher_joueurs(self):
         if len(self.liste_joueurs) == 0:
             return
         else:
             for i in self.liste_joueurs:
-                print('Nom : {0[nom_famille]} ; Prénom : {0[prenom]} ; Date de naissance : {0[date_naissance]} ; Sexe : {0[sexe]} ; Classement : {0[classement]}'.format(i.serialize()))
+                print('Nom : {0[nom_famille]} ; Prénom : {0[prenom]} ; Date de naissance : {0[date_naissance]} ; Sexe : {0[sexe]} ; Classement : {0[classement]}'.format(i))
 
-    def tour()
-
-x = Tournoi(2,"Tournoi du Mans","Mans","13/09/2016",4)
+    def premier_tour(self):
+        l = len(self.liste_joueurs)
+        sorted_by_rank = sorted(self.liste_joueurs,key=lambda player: player['classement'])
+        mid = int(l//2)
+        if l%2 == 0:
+            sup = sorted_by_rank[:mid]
+            inf = sorted_by_rank[mid:]
+        else:
+            sup = sorted_by_rank[:mid + 1]
+            inf = sorted_by_rank[mid + 1:]
+        print(sup,inf)
