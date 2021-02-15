@@ -16,7 +16,7 @@ class Tournoi:
         return self.__dict__
 
     def ajouter_joueurs(self):
-        for i in range(self.nb_joueurs):
+        for _ in range(self.nb_joueurs):
             lastname = input("Nom de famille : ")
             firstname = input("Prénom : ")
             date = input("Date de naissance : ")
@@ -30,24 +30,33 @@ class Tournoi:
             return
         else:
             for i in self.liste_joueurs:
-                print('Nom : {0[nom_famille]} ; Prénom : {0[prenom]} ; Date de naissance : {0[date_naissance]} ; Sexe : {0[sexe]} ; Classement : {0[classement]}'.format(i))
+                print('Nom : {0[nom_famille]} ; Prénom : {0[prenom]} ; Date de naissance : {0[date_naissance]} ; Sexe : {0[sexe]} ; Classement : {0[classement]}'.format(i.serialize()))
 
     def premier_tour(self):
         l = len(self.liste_joueurs)
-        sorted_by_rank = sorted(self.liste_joueurs,key=lambda player: player['classement'])
+        sorted_by_rank = sorted(self.liste_joueurs,key=lambda player: player.classement)
         mid = int(l//2)
         sup = sorted_by_rank[:mid]
         inf = sorted_by_rank[mid:]
         liste_matchs = []
         for i in range(mid):
             match = Match(sup[i],inf[i])
+            print(match.serialize())
             match.resultat(int(input("Indiquez 1 si le joueur 1 a gagné le match, sinon 2. En cas d'égalité, 1/2 : ")))
-            liste_matchs.append(match.serialize())
+            liste_matchs.append(match)
         tour = Round(liste_matchs)
-        self.liste_rounds.append(tour.afficher_liste_matchs())
+        self.liste_rounds.append(tour)
         matchs_done = tour.afficher_liste_matchs()
         for i in matchs_done:
-            index_gagnant = i['gagnant']
-            joueur_perdant 
+            print(i.serialize())
+            index_perdant = i.serialize()['perdant']
+        self.afficher_rounds()
+    
+    def afficher_perdants(self):
+        return self.liste_perdants
             
-            
+    def afficher_rounds(self):
+        for i in self.liste_rounds:
+            print(f"Liste des matchs à ce round : {i.afficher_liste_matchs()}")
+            for j in i.afficher_liste_matchs():
+                print(f"Match : {j.serialize()}")
