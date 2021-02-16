@@ -49,8 +49,9 @@ class Tournoi:
         matchs_done = tour.afficher_liste_matchs()
         for i in matchs_done:
             print(i.serialize())
-            index_perdant = i.serialize()['perdant']
-        self.afficher_rounds()
+            joueur_perdant = "".join(["joueur",str(i.serialize()['perdant'])])
+            print(f"Joueur perdant : {i.serialize()[joueur_perdant].serialize()}")
+        #self.afficher_rounds()
     
     def afficher_perdants(self):
         return self.liste_perdants
