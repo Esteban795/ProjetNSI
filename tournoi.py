@@ -22,7 +22,6 @@ class Tournoi:
             date = input("Date de naissance : ")
             gender = input("Sexe : ")
             ranking = int(input("Classement du joueur : "))
-            print("\n")
             joueur = Player(lastname,firstname,date,gender,ranking)
             self.liste_joueurs.append(joueur)
 
@@ -31,6 +30,13 @@ class Tournoi:
             return "Aucun joueur n'a encore été ajouté."
         else:
             for i in self.liste_joueurs:
+                print('Nom : {0[nom_famille]} ; Prénom : {0[prenom]} ; Date de naissance : {0[date_naissance]} ; Sexe : {0[sexe]} ; Classement : {0[classement]}'.format(i.serialize()))
+    
+    def afficher_perdants(self):
+        if len(self.liste_perdants) == 0:
+            return "Personne n'a encore perdu."
+        else:
+            for i in self.liste_perdants:
                 print('Nom : {0[nom_famille]} ; Prénom : {0[prenom]} ; Date de naissance : {0[date_naissance]} ; Sexe : {0[sexe]} ; Classement : {0[classement]}'.format(i.serialize()))
 
     def premier_tour(self):
@@ -46,17 +52,22 @@ class Tournoi:
             liste_matchs.append(match)
         tour = Round(liste_matchs)
         self.liste_rounds.append(tour)
-        matchs_done = tour.afficher_liste_matchs()
-        for i in matchs_done:
+        for i in liste_matchs:
             joueur_perdant = "".join(["joueur",str(i.serialize()['perdant'])])
             self.liste_perdants.append(i.serialize()[joueur_perdant])
             self.liste_joueurs.remove(i.serialize()[joueur_perdant])
         self.afficher_joueurs()
         self.afficher_perdants()
+        self.nb_tours -= 1
     
-    def afficher_perdants(self):
-        if len(self.liste_perdants) == 0:
-            return "Personne n'a encore perdu."
-        else:
-            for i in self.liste_perdants:
-                print('Nom : {0[nom_famille]} ; Prénom : {0[prenom]} ; Date de naissance : {0[date_naissance]} ; Sexe : {0[sexe]} ; Classement : {0[classement]}'.format(i.serialize()))
+    def reste_tournoi(self):
+        while self.nb_tours > 0:
+            liste_matchs = []
+            for i in range(0,len(self.liste_joueurs) - 1,2):
+                match = Match(self.liste_joueurs[i],self.liste_joueurs[i + 1])
+                match.resultat(int(input("Indiquez 1 si le joueur 1 a gagné le match, sinon 2. En cas d'égalité, 1/2 : ")))
+                liste_matchs.append(match)
+            tour = Round(liste_matchs)
+            self.liste_rounds.append()
+            for i in liste_matchs:
+                pass
