@@ -13,7 +13,7 @@ class Match:
         self.perdant = -1
 
     def resultat(self,valeur):
-        self.perdant = 0 if valeur == 2 else 1
+        self.perdant = 1 if valeur == 1 else 0
 
     def serialize(self):
         return self.__dict__
