@@ -7,13 +7,11 @@ class Round:
 
 
 class Match:
-    def __init__(self,joueur1,joueur2):
+    def __init__(self,joueur0,joueur1):
+        self.joueur0 = joueur0
         self.joueur1 = joueur1
-        self.joueur2 = joueur2
         self.perdant = -1
-
     def resultat(self,valeur):
         self.perdant = 1 if valeur == 1 else 0
-
     def serialize(self):
         return self.__dict__

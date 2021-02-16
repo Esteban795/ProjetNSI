@@ -22,6 +22,7 @@ class Tournoi:
             date = input("Date de naissance : ")
             s = input("Sexe : ")
             ranking = int(input("Classement du joueur : "))
+            print("\n")
             joueur = Player(lastname,firstname,date,s,ranking)
             self.liste_joueurs.append(joueur)
 
@@ -41,23 +42,21 @@ class Tournoi:
         liste_matchs = []
         for i in range(mid):
             match = Match(sup[i],inf[i])
-            print(match.serialize())
             match.resultat(int(input("Indiquez 1 si le joueur 1 a gagné le match, sinon 2. En cas d'égalité, 1/2 : ")))
             liste_matchs.append(match)
         tour = Round(liste_matchs)
         self.liste_rounds.append(tour)
         matchs_done = tour.afficher_liste_matchs()
         for i in matchs_done:
-            print(i.serialize())
             joueur_perdant = "".join(["joueur",str(i.serialize()['perdant'])])
-            print(f"Joueur perdant : {i.serialize()[joueur_perdant].serialize()}")
-        #self.afficher_rounds()
+            self.liste_perdants.append(i.serialize()[joueur_perdant])
+            self.liste_joueurs.remove(i.serialize()[joueur_perdant])
+        self.afficher_joueurs()
+        self.afficher_perdants()
     
     def afficher_perdants(self):
-        return self.liste_perdants
-            
-    def afficher_rounds(self):
-        for i in self.liste_rounds:
-            print(f"Liste des matchs à ce round : {i.afficher_liste_matchs()}")
-            for j in i.afficher_liste_matchs():
-                print(f"Match : {j.serialize()}")
+        if len(self.liste_perdants) == 0:
+            return "Personne n'a encore perdu."
+        else:
+            for i in self.liste_perdants:
+                print('Nom : {0[nom_famille]} ; Prénom : {0[prenom]} ; Date de naissance : {0[date_naissance]} ; Sexe : {0[sexe]} ; Classement : {0[classement]}'.format(i.serialize()))

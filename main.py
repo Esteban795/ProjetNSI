@@ -11,7 +11,7 @@ date_tournoi = input("Date du tournoi : ")
 tours = int("".join([str(int(joueurs/2)) if joueurs%2 == 0 else str(int(joueurs/2) + 1)]))
 tournoi = Tournoi(joueurs,nom_tournoi,lieu_tournoi,date_tournoi,tours)"""
 
-tournoi = Tournoi(2,"Tournoi du Mans","Mans","11/08/2003",2)
+tournoi = Tournoi(4,"Tournoi du Mans","Mans","11/08/2003",2)
 print(tournoi.serialize())
 tournoi.ajouter_joueurs()
 tournoi.afficher_joueurs()
