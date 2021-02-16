@@ -2,7 +2,7 @@ from player import Player
 from match import Match,Round
 
 class Tournoi:
-    def __init__(self,nombre_joueurs,nom,lieu,date:str,nb_tours=4):
+    def __init__(self,nombre_joueurs:int,nom:str,lieu:str,date:str,nb_tours=4):
         self.nb_joueurs = nombre_joueurs
         self.liste_joueurs = []
         self.nom = nom
@@ -20,15 +20,15 @@ class Tournoi:
             lastname = input("Nom de famille : ")
             firstname = input("Prénom : ")
             date = input("Date de naissance : ")
-            s = input("Sexe : ")
+            gender = input("Sexe : ")
             ranking = int(input("Classement du joueur : "))
             print("\n")
-            joueur = Player(lastname,firstname,date,s,ranking)
+            joueur = Player(lastname,firstname,date,gender,ranking)
             self.liste_joueurs.append(joueur)
 
     def afficher_joueurs(self):
         if len(self.liste_joueurs) == 0:
-            return
+            return "Aucun joueur n'a encore été ajouté."
         else:
             for i in self.liste_joueurs:
                 print('Nom : {0[nom_famille]} ; Prénom : {0[prenom]} ; Date de naissance : {0[date_naissance]} ; Sexe : {0[sexe]} ; Classement : {0[classement]}'.format(i.serialize()))
