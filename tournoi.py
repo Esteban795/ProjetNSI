@@ -68,6 +68,18 @@ class Tournoi:
                 match.resultat(int(input("Indiquez 1 si le joueur 1 a gagné le match, sinon 2. En cas d'égalité, 1/2 : ")))
                 liste_matchs.append(match)
             tour = Round(liste_matchs)
-            self.liste_rounds.append()
+            self.liste_rounds.append(tour)
             for i in liste_matchs:
-                pass
+                joueur_perdant = "".join(["joueur",str(i.serialize()['perdant'])])
+                self.liste_perdants.append(i.serialize()[joueur_perdant])
+                self.liste_joueurs.remove(i.serialize()[joueur_perdant])
+            self.afficher_joueurs()
+            self.afficher_perdants()
+            self.nb_tours -= 1
+            if len(self.liste_joueurs) == 1:
+                self.fin_tournoi()
+                break
+
+    def fin_tournoi(self):
+        print('{0[nom_famille]} {0[prenom]} est le grand vainqueur de notre tournoi !'.format(self.liste_joueurs[0].serialize()))
+        
