@@ -11,7 +11,11 @@ def tournament(nb,n,l,d,nb_t):
     tournament_file = TinyDB(tournament_file_name)
     with open(tournament_file_name,"w") as file:
         json.dump(tournament_object.serialize(),file,indent=4)
+    with open("var.txt","w") as file_to_open:
+        pass
     os.system("python main.py")
+
+
 launcher = Tk()
 
 title = Label(launcher,text="Tournament Manager",font=("Times New Roman", 35, "bold"))
