@@ -1,13 +1,17 @@
 from tkinter import *
-from tkinter.simpledialog import *
-from tkinter.messagebox import *
 from tournoi import Tournoi
-import os 
+from tinydb import TinyDB
+import json
+import os
+
 
 def tournament(nb,n,l,d,nb_t):
-    x = Tournoi(nb,n,l,d,nb_t)
-    print(x.serialize())
-
+    tournament_object = Tournoi(int(nb),n,l,d,int(nb_t))
+    tournament_file_name = "_".join(tournament_object.nom.split(" ")) + ".json"
+    tournament_file = TinyDB(tournament_file_name)
+    with open(tournament_file_name,"w") as file:
+        json.dump(tournament_object.serialize(),file,indent=4)
+    os.system("python main.py")
 launcher = Tk()
 
 title = Label(launcher,text="Tournament Manager",font=("Times New Roman", 35, "bold"))
