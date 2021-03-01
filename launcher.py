@@ -1,19 +1,23 @@
 from tkinter import *
+from tkinter.messagebox import *
 from tournoi import Tournoi
+from match import Match,Round
+from player import Player
 from tinydb import TinyDB
 import json
-import os
+import os,glob
 
+def display_db():
+    dbs.set([i for i in glob.glob("*.json")])
 
-def tournament(nb,n,l,d,nb_t):
+def tournament_creation(nb,n,l,d,nb_t):
     tournament_object = Tournoi(int(nb),n,l,d,int(nb_t))
     tournament_file_name = "_".join(tournament_object.nom.split(" ")) + ".json"
-    tournament_file = TinyDB(tournament_file_name)
-    with open(tournament_file_name,"w") as file:
-        json.dump(tournament_object.serialize(),file,indent=4)
-    with open("var.txt","w") as file_to_open:
-        pass
-    os.system("python main.py")
+    if tournament_file_name not in glob.glob("*.json"):
+        tournament_file = TinyDB(tournament_file_name)
+        with open(tournament_file_name,"w") as file:
+            json.dump(tournament_object.serialize(),file,indent=4)
+        display_db()
 
 
 launcher = Tk()
@@ -53,15 +57,32 @@ nb_rounds.place(x=0,y=125)
 nb_rounds_entry = Entry(create_tournament)
 nb_rounds_entry.place(x=200,y=125)
 
-create = Button(create_tournament,text="CREATE",command= lambda: tournament(nb_players_entry.get(),tournament_name_entry.get(),location_entry.get(),date_entry.get(),nb_rounds_entry.get()))
+create = Button(create_tournament,text="CREATE",command=lambda: tournament_creation(nb_players_entry.get(),tournament_name_entry.get(),location_entry.get(),date_entry.get(),nb_rounds_entry.get()))
 create.place(x=235,y=175)
 #### 
 
 
-select_tournament = LabelFrame(main_frame,text="OR SELECT AN ALREADY EXISTING TOURNAMENT",width=495,height=295)
-select_tournament.place(x=505,y=0)
 
 ###" Select tournament"
+select_tournament = LabelFrame(main_frame,text="OR SELECT AN ALREADY EXISTING TOURNAMENT",width=495,height=295)
+select_tournament.place(x=505,y=0)
+dbs = StringVar()
+display_db()
+
+existing_dbs = Listbox(select_tournament, width=30,height=10,listvariable=dbs)
+existing_dbs.place(x=10,y=30)
+scrollbar = Scrollbar(select_tournament,orient="vertical")
+scrollbar.config(command=existing_dbs.yview)
+scrollbar.place(x=200,y=50)
+existing_dbs.config(yscrollcommand=scrollbar.set)
+
+refresh_button = Button(select_tournament,text="REFRESH DATABASES",command=display_db)
+refresh_button.place(x=300,y=15)
+################################
+
+
+
 launcher.geometry("1005x400")
 launcher.title("Tournament Manager")
+launcher.resizable(width=False,height=False)
 launcher.mainloop()
