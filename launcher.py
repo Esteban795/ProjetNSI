@@ -1,23 +1,39 @@
 from tkinter import *
 from tkinter.messagebox import *
 from tournoi import Tournoi
-from match import Match,Round
-from player import Player
 from tinydb import TinyDB
 import json
 import os,glob
 
+DEV_MODE = True
+
 def display_db():
     dbs.set([i for i in glob.glob("*.json")])
 
-def tournament_creation(nb,n,l,d,nb_t):
-    tournament_object = Tournoi(int(nb),n,l,d,int(nb_t))
-    tournament_file_name = "_".join(tournament_object.nom.split(" ")) + ".json"
-    if tournament_file_name not in glob.glob("*.json"):
-        tournament_file = TinyDB(tournament_file_name)
-        with open(tournament_file_name,"w") as file:
-            json.dump(tournament_object.serialize(),file,indent=4)
+def select_db():
+    filename = existing_dbs.get("active")
+    if filename == "":
+        showerror("Error","No tournament selected.")
+
+def delete_db():
+    filename = existing_dbs.get("active")
+    if filename == "":
+        showerror("Error","No tournament selected.")
+    elif askokcancel("Delete a tournament","Are you sure you want to delete this tournament ?"):
+        os.remove(filename)
         display_db()
+
+def tournament_creation(nb,n,l,d,nb_t):
+    liste = [nb,n,l,d,nb_t]
+    if "" in liste or nb is str or nb_t is str:
+        showerror("Error","Make sure to fill every field ! Also pay attention to the informations you set for each field : number of players must be a number, as well as number of rounds")
+    else:
+        tournament_object = Tournoi(int(nb),n,l,d,int(nb_t))
+        tournament_file_name = "_".join(tournament_object.nom.split(" ")) + ".json"
+        if tournament_file_name not in glob.glob("*.json"):
+            with open(tournament_file_name,"w") as file:
+                json.dump(tournament_object.serialize(),file,indent=4)
+            display_db()
 
 
 launcher = Tk()
@@ -63,21 +79,27 @@ create.place(x=235,y=175)
 
 
 
-###" Select tournament"
+###Select tournament
 select_tournament = LabelFrame(main_frame,text="OR SELECT AN ALREADY EXISTING TOURNAMENT",width=495,height=295)
 select_tournament.place(x=505,y=0)
 dbs = StringVar()
 display_db()
 
-existing_dbs = Listbox(select_tournament, width=30,height=10,listvariable=dbs)
+existing_dbs = Listbox(select_tournament, width=30,height=15,listvariable=dbs)
 existing_dbs.place(x=10,y=30)
 scrollbar = Scrollbar(select_tournament,orient="vertical")
 scrollbar.config(command=existing_dbs.yview)
 scrollbar.place(x=200,y=50)
 existing_dbs.config(yscrollcommand=scrollbar.set)
 
-refresh_button = Button(select_tournament,text="REFRESH DATABASES",command=display_db)
+refresh_button = Button(select_tournament,text="REFRESH TOURNAMENT LIST",command=display_db,width=25)
 refresh_button.place(x=300,y=15)
+
+select_db_button = Button(select_tournament,text="SELECT THIS TOURNAMENT",command=select_db,width=25)
+select_db_button.place(x=300,y=50)
+
+delete_db_button = Button(select_tournament,text="REMOVE A TOURNAMENT",command=delete_db,width=25)
+delete_db_button.place(x=300,y=85)
 ################################
 
 
