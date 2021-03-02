@@ -1,6 +1,3 @@
-from player import Player
-from match import Match,Round
-
 class Tournoi:
     def __init__(self,nombre_joueurs:int,nom:str,lieu:str,date:str,nb_tours=4):
         self.nb_joueurs = nombre_joueurs
