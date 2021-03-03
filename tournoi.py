@@ -12,8 +12,8 @@ class Tournoi:
     def serialize(self):
         return self.__dict__
 
-    def ajouter_joueurs(self,player):
-        self.liste_joueurs.append(player.serialize())
+    def ajouter_joueur(self,player):
+        self.liste_joueurs.append(player)
 
     def afficher_joueurs(self):
         if len(self.liste_joueurs) == 0:

@@ -1,5 +1,4 @@
 from tournoi import Tournoi
-from player import Player
 from match import Match,Round
 from player import Player
 from tkinter import *
@@ -7,6 +6,12 @@ import json
 
 def main(filename):
     def add_player():
+        def add_this_player():
+            player = Player(lastname_entry.get(),firstname_entry.get(),date_naissance_entry.get(),sexe_entry.get(),rank_entry.get(),identifier)
+            tournament.ajouter_joueur(player)
+            add_player_gui.destroy()
+            retrieve_existing_players()
+
         add_player_gui = Tk()
         lastname = Label(add_player_gui,text="Lastname : ")
         lastname.place(x=10,y=10)
@@ -23,7 +28,21 @@ def main(filename):
         date_naissance_entry = Entry(add_player_gui)
         date_naissance_entry.place(x=100,y=60)
 
+        sexe = Label(add_player_gui,text="Gender : ")
+        sexe.place(x=10,y=85)
+        sexe_entry = Entry(add_player_gui)
+        sexe_entry.place(x=100,y=85)
 
+        rank = Label(add_player_gui,text="Rank : ")
+        rank.place(x=10,y=110)
+        rank_entry = Entry(add_player_gui)
+        rank_entry.place(x=100,y=110)
+
+        identifier = len(tournament.liste_joueurs) + 1
+
+        add = Button(add_player_gui,text="ADD THIS PLAYER",command=add_this_player)
+        add.place(x=150,y=200)
+        
         add_player_gui.title("Add a player")
         add_player_gui.geometry("300x300")
         add_player_gui.mainloop()
@@ -32,7 +51,7 @@ def main(filename):
         """Retrieves already added players from the tournament"""
         liste = []
         for i in tournament.serialize()["liste_joueurs"]:
-            s = f"{i['id']}. {i['nom_famille']} {i['prenom']}"
+            s = f"{i.serialize()['id']}. {i.serialize()['nom_famille']} {i.serialize()['prenom']}"
             liste.append(s)
         players.set(liste)
 
