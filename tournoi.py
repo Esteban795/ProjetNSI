@@ -1,26 +1,19 @@
 class Tournoi:
-    def __init__(self,nombre_joueurs:int,nom:str,lieu:str,date:str,nb_tours=4):
+    def __init__(self,nombre_joueurs:int,nom:str,lieu:str,date:str,nb_tours=4,liste_joueurs=[],liste_rounds=[],liste_perdants=[]):
         self.nb_joueurs = nombre_joueurs
-        self.liste_joueurs = []
+        self.liste_joueurs = liste_joueurs
         self.nom = nom
         self.lieu = lieu
         self.date = date
         self.nb_tours = nb_tours
-        self.liste_rounds = []
-        self.liste_perdants = []
+        self.liste_rounds = liste_rounds
+        self.liste_perdants = liste_perdants
     
     def serialize(self):
         return self.__dict__
 
-    def ajouter_joueurs(self):
-        for _ in range(self.nb_joueurs):
-            lastname = input("Nom de famille : ")
-            firstname = input("Prénom : ")
-            date = input("Date de naissance : ")
-            gender = input("Sexe : ")
-            ranking = int(input("Classement du joueur : "))
-            joueur = Player(lastname,firstname,date,gender,ranking)
-            self.liste_joueurs.append(joueur)
+    def ajouter_joueurs(self,player):
+        self.liste_joueurs.append(player.serialize())
 
     def afficher_joueurs(self):
         if len(self.liste_joueurs) == 0:
