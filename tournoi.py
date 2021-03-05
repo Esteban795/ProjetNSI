@@ -1,5 +1,5 @@
 class Tournoi:
-    def __init__(self,nombre_joueurs:int,nom:str,lieu:str,date:str,nb_tours=4,liste_joueurs=[],liste_rounds=[],liste_perdants=[]):
+    def __init__(self,nombre_joueurs:int,nom:str,lieu:str,date:str,nb_tours=4,liste_joueurs=[],liste_rounds=[],liste_perdants=[],liste_gagnants=[]):
         self.nb_joueurs = nombre_joueurs
         self.liste_joueurs = liste_joueurs
         self.nom = nom
@@ -7,6 +7,7 @@ class Tournoi:
         self.date = date
         self.nb_tours = nb_tours
         self.liste_rounds = liste_rounds
+        self.liste_gagnants = liste_gagnants
         self.liste_perdants = liste_perdants
     
     def serialize(self):

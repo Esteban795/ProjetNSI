@@ -118,7 +118,7 @@ refresh_button.place(x=300,y=15)
 select_db_button = Button(select_tournament,text="SELECT THIS TOURNAMENT",command=select_db,width=25)
 select_db_button.place(x=300,y=50)
 
-delete_db_button = Button(select_tournament,text="REMOVE A TOURNAMENT",command=delete_db,width=25)
+delete_db_button = Button(select_tournament,text="REMOVE THIS TOURNAMENT",command=delete_db,width=25)
 delete_db_button.place(x=300,y=85)
 
 delete_all_tournaments = Button(select_tournament,text="REMOVE ALL TOURNAMENTS",command=delete_all,width=25)
