@@ -48,7 +48,7 @@ def tournament_creation(nb,n,l,d,nb_t):
             location_entry.delete(0,len(l) + 1)
             date_entry.delete(0,len(d) + 1)
             nb_rounds_entry.delete(0,len(nb_t) + 1)
-            tournament_file_name = "_".join(tournament_object.nom.split(" ")) + ".json"
+            tournament_file_name = "_".join(tournament_object.name.split(" ")) + ".json"
             if tournament_file_name not in glob.glob("*.json"):
                 with open(tournament_file_name,"w") as file:
                     json.dump(tournament_object.serialize(),file,indent=4)
