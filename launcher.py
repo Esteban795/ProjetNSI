@@ -16,10 +16,8 @@ def delete_all():
             for i in glob.glob("*.json"):
                 os.remove(i)
             display_db()
-
 def display_db():
     dbs.set([i for i in glob.glob("*.json")]) #Gets every json file in the folder.
-
 def select_db():
     filename = existing_dbs.get("active")
     if filename == "":
@@ -27,7 +25,6 @@ def select_db():
     else:
         launcher.destroy()
         main(filename)
-
 def delete_db():
     filename = existing_dbs.get("active")
     if filename == "":
@@ -35,7 +32,6 @@ def delete_db():
     elif askokcancel("Delete a tournament","Are you sure you want to delete {} ?".format(filename)):
         os.remove(filename)
         display_db()
-
 def tournament_creation(nb,n,l,d,nb_t):
     liste = [nb,n,l,d,nb_t]
     if "" in liste: #Make sure each field is filled and also that nb_players and nb_rounds aren't str
@@ -52,7 +48,9 @@ def tournament_creation(nb,n,l,d,nb_t):
             if tournament_file_name not in glob.glob("*.json"):
                 with open(tournament_file_name,"w") as file:
                     json.dump(tournament_object.serialize(),file,indent=4)
-                display_db()
+                launcher.destroy()
+                main(tournament_file_name)
+                
         except ValueError:
             showerror("Error","Number of players and number of rounds must be a whole number !")
 
