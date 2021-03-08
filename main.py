@@ -3,9 +3,11 @@ from match import Match,Round
 from player import Player
 from tkinter import *
 from tkinter.messagebox import *
+from tkinter.filedialog import *
 from tkinter import ttk
 import json
-import time
+
+import os
 def main(filename):
     def on_closing():
         if askokcancel("Quit","Are you sure you want to quit ?"):
@@ -15,8 +17,25 @@ def main(filename):
     def rewrite_json(path):
         with open(path,"w") as fichier:
             json.dump(tournament.serialize(),fichier,indent=4)
+    
+    def load():
+        f = askopenfile(filetypes=[("json files",".json")],initialdir=os.getcwd())
+        if f != "":
+            path = "{0.name}".format(f)
+            gui.destroy()
+            main(path)
     gui = Tk()
     gui.geometry("1000x700")
+    frame = Frame(gui)
+    frame.pack()
+    
+    mainmenu = Menu(frame)
+    mainmenu.add_command(label = "Save", command=lambda:rewrite_json(filename))  
+    mainmenu.add_command(label = "Load", command=load)
+    mainmenu.add_command(label = "Exit", command=gui.destroy)
+ 
+    gui.config(menu = mainmenu)
+
     gui.resizable(width=False,height=False)
     gui.title(" ".join(["Tournament Manager : ",filename]))
     with open(filename,"r") as fichier:
@@ -39,11 +58,13 @@ def main(filename):
                 tournament.players_list[j]["id"] = j + 1
             retrieve_existing_players()
             update_nb_players()
+            change_order()
     def remove_all_players():
         if askokcancel("Validation","Are you sure you want to remove all players from this tournament ?"):
             tournament.players_list = []
             retrieve_existing_players()
             update_nb_players()
+            change_order()
     def add_player():
         def add_this_player():
             player = Player(lastname_entry.get(),firstname_entry.get(),date_naissance_entry.get(),sexe_entry.get(),int(rank_entry.get()),identifier)
@@ -106,6 +127,7 @@ def main(filename):
                     i["sexe"] = sexe.get()
                     i["rank"] = int(rank.get())
                     modify_gui.destroy()
+                    change_order()
 
                 modify_gui = Tk()
                 lastname = StringVar(modify_gui,value=i["lastname"])
