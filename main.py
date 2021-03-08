@@ -140,7 +140,7 @@ def main(filename):
                 rank_entry.place(x=100,y=110)
 
                 modify = Button(modify_gui,text="MODIFY THE INFORMATION PLAYER",command=modify_this_player)
-                modify.place(x=100,y=160)
+                modify.place(x=75,y=160)
                 modify_gui.title("Modifying '{} {}'".format(i["lastname"],i["firstname"]))
                 modify_gui.geometry("350x200")
                 modify_gui.mainloop()
@@ -154,7 +154,7 @@ def main(filename):
     update_nb_players()
     current_nb_players_label = Label(gui,textvariable=current_nb_players)
     current_nb_players_label.place(x=10,y=20)
-    players_list = Listbox(players_frame,listvariable=players,width=25,height=15,bg="black",fg="white")
+    players_list = Listbox(players_frame,listvariable=players,width=25,height=15)
     players_list.place(x=10,y=30)
 
     
@@ -175,27 +175,28 @@ def main(filename):
 
 
     #Rank frame
+    rank_list = StringVar()
     def change_order(*args):
         sort_method = order_by_menu_value.get()
-        if sort_method == "ASC":
+        if sort_method == "ASCENDING":
             lst = sorted([i for i in tournament.players_list],key=lambda j:j["rank"])
         else:
             lst = sorted([i for i in tournament.players_list],key=lambda j:j["rank"],reverse=True)
         rank_list.set(["{}. {} {}".format(i["rank"],i["lastname"],i['firstname']) for i in lst])
 
-    rank_frame = LabelFrame(gui,width=395,height=300,text="RANKING")
+    rank_frame = LabelFrame(gui,width=395,height=200,text="RANKING")
     rank_frame.place(x=605,y=0)
     
-    order_by = ["ASC","DESC"]
+    order_by = ["ASCENDING","DESCENDING"]
     order_by_menu_value = StringVar()
     order_by_menu_value.trace('w',change_order)
     order_by_menu = ttk.Combobox(rank_frame,values=order_by,width=15,state="readonly",textvariable=order_by_menu_value)
     order_by_menu.set("PICK AN OPTION")
     order_by_menu.place(x=10,y=10)
 
-    rank_list = StringVar()
+    
     rank_list.set(["{}. {} {}".format(i["rank"],i["lastname"],i['firstname']) for i in tournament.players_list])
-    rank_listbox = Listbox(rank_frame,listvariable=rank_list,width=30,height=15)
+    rank_listbox = Listbox(rank_frame,listvariable=rank_list,width=30,height=10)
     rank_listbox.place(x=150,y=10)
     ######################
 
@@ -203,4 +204,4 @@ def main(filename):
     gui.mainloop()
 
 x = "Tournoi_du_Mans.json"
-main(x)
+#main(x)

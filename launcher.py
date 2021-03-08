@@ -129,7 +129,7 @@ delete_all_tournaments.place(x=300,y=175)
 icon = PhotoImage(file="img/wheels.png")
 
 launcher.geometry("1005x400")
-launcher.title("Tournament Manager")
+launcher.title("Tournament Manager : Launcher.")
 launcher.resizable(width=False,height=False)
 launcher.iconphoto(False,icon)
 launcher.mainloop()
