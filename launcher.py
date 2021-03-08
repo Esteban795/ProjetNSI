@@ -39,18 +39,20 @@ def tournament_creation(nb,n,l,d,nb_t):
     else:
         try:
             tournament_object = Tournoi(int(nb),n,l,d,int(nb_t))
-            tournament_name_entry.delete(0,len(n) + 1) #empty the field after creating a tournament
-            nb_players_entry.delete(0,len(nb) + 1)
-            location_entry.delete(0,len(l) + 1)
-            date_entry.delete(0,len(d) + 1)
-            nb_rounds_entry.delete(0,len(nb_t) + 1)
             tournament_file_name = "_".join(tournament_object.name.split(" ")) + ".json"
             if tournament_file_name not in glob.glob("*.json"):
+                tournament_name_entry.delete(0,len(n) + 1) #empty the field after creating a tournament
+                nb_players_entry.delete(0,len(nb) + 1)
+                location_entry.delete(0,len(l) + 1)
+                date_entry.delete(0,len(d) + 1)
+                nb_rounds_entry.delete(0,len(nb_t) + 1)
                 with open(tournament_file_name,"w") as file:
                     json.dump(tournament_object.serialize(),file,indent=4)
                 launcher.destroy()
                 main(tournament_file_name)
-                
+            else:
+                showerror("Error","{} already exists. Please enter a valid name.".format(tournament_file_name))
+                tournament_name_entry.delete(0,len(n) + 1)
         except ValueError:
             showerror("Error","Number of players and number of rounds must be a whole number !")
 

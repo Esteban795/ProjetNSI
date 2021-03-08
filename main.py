@@ -3,8 +3,9 @@ from match import Match,Round
 from player import Player
 from tkinter import *
 from tkinter.messagebox import *
+from tkinter import ttk
 import json
-
+import time
 def main(filename):
     def on_closing():
         if askokcancel("Quit","Are you sure you want to quit ?"):
@@ -45,12 +46,12 @@ def main(filename):
             update_nb_players()
     def add_player():
         def add_this_player():
-            player = Player(lastname_entry.get(),firstname_entry.get(),date_naissance_entry.get(),sexe_entry.get(),rank_entry.get(),identifier)
+            player = Player(lastname_entry.get(),firstname_entry.get(),date_naissance_entry.get(),sexe_entry.get(),int(rank_entry.get()),identifier)
             tournament.ajouter_joueur(player.serialize())
             add_player_gui.destroy()
             retrieve_existing_players()
             update_nb_players()
-
+            change_order()
         add_player_gui = Tk()
         lastname = Label(add_player_gui,text="Lastname : ")
         lastname.place(x=10,y=10)
@@ -103,7 +104,7 @@ def main(filename):
                     i["firstname"] = firstname.get()
                     i["date"] = date_naissance.get()
                     i["sexe"] = sexe.get()
-                    i["rank"] = rank.get()
+                    i["rank"] = int(rank.get())
                     modify_gui.destroy()
 
                 modify_gui = Tk()
@@ -158,30 +159,48 @@ def main(filename):
 
     
     add_player_button = Button(players_frame,text="ADD A PLAYER",command=add_player,width=35,bg="white",fg="black",activebackground="white",activeforeground="black")
-    add_player_button.place(x=220,y=10)
+    add_player_button.place(x=220,y=50)
 
     remove_player_button = Button(players_frame,text="REMOVE SELECTED PLAYER",command=remove_player,width=35,bg="white",fg="black",activebackground="white",activeforeground="black")
-    remove_player_button.place(x=220,y=40)
+    remove_player_button.place(x=220,y=80)
 
     modify_infos_button = Button(gui,text="MODIFY SELECTED PLAYER'S INFORMATIONS",command=modify_infos,width=35,bg="white",fg="black",activebackground="white",activeforeground="black")
-    modify_infos_button.place(x=225,y=90)
+    modify_infos_button.place(x=225,y=125)
 
     remove_all_player_button = Button(players_frame,text="REMOVE ALL PLAYERS",command=remove_all_players,width=35,bg="white",fg="black",activebackground="white",activeforeground="black")
-    remove_all_player_button.place(x=215,y=180)
+    remove_all_player_button.place(x=215,y=190)
 
 
     #######
 
 
     #Rank frame
-    rank_frame = LabelFrame(gui,width=395,height=295,text="RANKING")
+    def change_order(*args):
+        sort_method = order_by_menu_value.get()
+        if sort_method == "ASC":
+            lst = sorted([i for i in tournament.players_list],key=lambda j:j["rank"])
+        else:
+            lst = sorted([i for i in tournament.players_list],key=lambda j:j["rank"],reverse=True)
+        rank_list.set(["{}. {} {}".format(i["rank"],i["lastname"],i['firstname']) for i in lst])
+
+    rank_frame = LabelFrame(gui,width=395,height=300,text="RANKING")
     rank_frame.place(x=605,y=0)
     
+    order_by = ["ASC","DESC"]
+    order_by_menu_value = StringVar()
+    order_by_menu_value.trace('w',change_order)
+    order_by_menu = ttk.Combobox(rank_frame,values=order_by,width=15,state="readonly",textvariable=order_by_menu_value)
+    order_by_menu.set("PICK AN OPTION")
+    order_by_menu.place(x=10,y=10)
 
+    rank_list = StringVar()
+    rank_list.set(["{}. {} {}".format(i["rank"],i["lastname"],i['firstname']) for i in tournament.players_list])
+    rank_listbox = Listbox(rank_frame,listvariable=rank_list,width=30,height=15)
+    rank_listbox.place(x=150,y=10)
     ######################
 
     gui.protocol("WM_DELETE_WINDOW", on_closing)
     gui.mainloop()
 
 x = "Tournoi_du_Mans.json"
-#main(x)
+main(x)
