@@ -6,8 +6,8 @@ from tkinter.messagebox import *
 from tkinter.filedialog import *
 from tkinter import ttk
 import json
-
 import os
+
 def main(filename):
     def on_closing():
         if askokcancel("Quit","Are you sure you want to quit ?"):
@@ -21,6 +21,7 @@ def main(filename):
     def load():
         f = askopenfile(filetypes=[("json files",".json")],initialdir=os.getcwd())
         if f != "":
+            rewrite_json(filename)
             path = "{0.name}".format(f)
             gui.destroy()
             main(path)
@@ -32,9 +33,9 @@ def main(filename):
     mainmenu = Menu(frame)
     mainmenu.add_command(label = "Save", command=lambda:rewrite_json(filename))  
     mainmenu.add_command(label = "Load", command=load)
-    mainmenu.add_command(label = "Exit", command=gui.destroy)
+    mainmenu.add_command(label = "Exit", command=on_closing)
  
-    gui.config(menu = mainmenu)
+    gui.config(menu=mainmenu)
 
     gui.resizable(width=False,height=False)
     gui.title(" ".join(["Tournament Manager : ",filename]))
@@ -168,7 +169,7 @@ def main(filename):
                 modify_gui.mainloop()
                 break
 
-    players_frame = LabelFrame(gui,text="PLAYERS OPTIONS",width=600,height=300)
+    players_frame = LabelFrame(gui,text="PLAYERS OPTIONS",width=690,height=300)
     players_frame.place(x=5,y=0)
     players = StringVar()
     retrieve_existing_players()
@@ -206,24 +207,28 @@ def main(filename):
             lst = sorted([i for i in tournament.players_list],key=lambda j:j["rank"],reverse=True)
         rank_list.set(["{}. {} {}".format(i["rank"],i["lastname"],i['firstname']) for i in lst])
 
-    rank_frame = LabelFrame(gui,width=395,height=200,text="RANKING")
-    rank_frame.place(x=605,y=0)
+    rank_frame = LabelFrame(gui,width=295,height=200,text="RANKING")
+    rank_frame.place(x=700,y=0)
     
     order_by = ["ASCENDING","DESCENDING"]
     order_by_menu_value = StringVar()
     order_by_menu_value.trace('w',change_order)
-    order_by_menu = ttk.Combobox(rank_frame,values=order_by,width=15,state="readonly",textvariable=order_by_menu_value)
+    order_by_menu = ttk.Combobox(rank_frame,values=order_by,width=13,state="readonly",textvariable=order_by_menu_value)
     order_by_menu.set("PICK AN OPTION")
-    order_by_menu.place(x=10,y=10)
+    order_by_menu.place(x=5,y=10)
 
     
     rank_list.set(["{}. {} {}".format(i["rank"],i["lastname"],i['firstname']) for i in tournament.players_list])
-    rank_listbox = Listbox(rank_frame,listvariable=rank_list,width=30,height=10)
-    rank_listbox.place(x=150,y=10)
+    rank_listbox = Listbox(rank_frame,listvariable=rank_list,width=25,height=10)
+    rank_listbox.place(x=125,y=10)
     ######################
 
+    #Rounds
+
+    rounds_frame = LabelFrame(gui,width=695,height=500,text="TOURNAMENT INFOS")
+    rounds_frame.place(x=5,y=305)
     gui.protocol("WM_DELETE_WINDOW", on_closing)
     gui.mainloop()
 
 x = "Tournoi_du_Mans.json"
-#main(x)
+main(x)
