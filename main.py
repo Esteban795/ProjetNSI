@@ -9,6 +9,17 @@ import json
 import os
 
 def main(filename):
+    def disable_players_buttons():
+        add_player_button.config(state="disabled")
+        remove_player_button.config(state="disabled")
+        remove_all_player_button.config(state="disabled")
+
+    def on_opening():
+        if has_tournament_started:
+            add_player_button.config(state="disabled")
+            remove_player_button.config(state="disabled")
+            remove_all_player_button.config(state="disabled")
+
     def on_closing():
         if askokcancel("Quit","Are you sure you want to quit ?"):
             rewrite_json(filename)
@@ -42,12 +53,13 @@ def main(filename):
     with open(filename,"r") as fichier:
         tournament_json = json.load(fichier)
         tournament = Tournoi(tournament_json["nb_players"],tournament_json["name"],tournament_json["location"],tournament_json["date"],tournament_json["number_of_rounds"],tournament_json["players_list"],tournament_json["list_of_rounds"],tournament_json["players_who_lost"],tournament_json["players_still_in_the_tournament"])
+    has_tournament_started = True if len(tournament.list_of_rounds) > 0 else False
     #####
 
     #Players frame
     def remove_player():
         player = players_list.get("active")
-        if len(tournament.players_list) > 0 and askokcancel("Validation","Are you sure you want te remove '{}' from the tournament ?".format(player[3:])):
+        if len(tournament.players_list) > 0 and askokcancel("Validation","Are you sure you want to remove '{}' from the tournament ?".format(player[3:])):
             player_id = int(player[0])
             index = 0  
             for i in range(len(tournament.players_list)):
@@ -67,6 +79,8 @@ def main(filename):
             update_nb_players()
             change_order()
     def add_player():
+        if len(tournament.players_list) == tournament.nb_players:
+            tournament.nb_players += 1
         def add_this_player():
             player = Player(lastname_entry.get(),firstname_entry.get(),date_naissance_entry.get(),sexe_entry.get(),int(rank_entry.get()),identifier)
             tournament.ajouter_joueur(player.serialize())
@@ -222,11 +236,24 @@ def main(filename):
     rank_listbox = Listbox(rank_frame,listvariable=rank_list,width=25,height=10)
     rank_listbox.place(x=125,y=10)
     ######################
+    
+    #Start tournament button
+    def start_tournament():
+        if askokcancel("Validation","Are you sure you want to start the tournament ? You won't be able to add or remove players once the tournament started."):
+            disable_players_buttons()
+            tournament.list_of_rounds = ["test"]
 
+    start_button = Button(gui,text="START THE TOURNAMENT",command=start_tournament)
+    start_button.place(x=760,y=235)
     #Rounds
 
     rounds_frame = LabelFrame(gui,width=990,height=395,text="TOURNAMENT INFOS")
     rounds_frame.place(x=5,y=305)
+
+
+
+    ##########
+    on_opening()
     gui.protocol("WM_DELETE_WINDOW", on_closing)
     gui.mainloop()
 
