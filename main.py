@@ -225,7 +225,7 @@ def main(filename):
 
     #Rounds
 
-    rounds_frame = LabelFrame(gui,width=695,height=500,text="TOURNAMENT INFOS")
+    rounds_frame = LabelFrame(gui,width=990,height=395,text="TOURNAMENT INFOS")
     rounds_frame.place(x=5,y=305)
     gui.protocol("WM_DELETE_WINDOW", on_closing)
     gui.mainloop()
