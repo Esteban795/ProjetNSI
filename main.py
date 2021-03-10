@@ -26,6 +26,7 @@ def main(filename):
             gui.destroy()
 
     def rewrite_json(path):
+        tournament.players_list = sorted(tournament.players_list,key=lambda i:i["id"])
         with open(path,"w") as fichier:
             json.dump(tournament.serialize(),fichier,indent=4)
     
@@ -36,6 +37,7 @@ def main(filename):
             path = "{0.name}".format(f)
             gui.destroy()
             main(path)
+
     gui = Tk()
     gui.geometry("1000x700")
     frame = Frame(gui)
@@ -182,6 +184,13 @@ def main(filename):
                 modify_gui.geometry("350x200")
                 modify_gui.mainloop()
                 break
+    def alphabetical_order(*args):
+        sorting = players_frame_sorting.get()
+        if sorting == "FIRSTNAME":
+            tournament.players_list = sorted(tournament.players_list,key=lambda i:i["firstname"])
+        else:
+            tournament.players_list = sorted(tournament.players_list,key=lambda i:i["lastname"])
+        retrieve_existing_players()
 
     players_frame = LabelFrame(gui,text="PLAYERS OPTIONS",width=690,height=300)
     players_frame.place(x=5,y=0)
@@ -194,6 +203,13 @@ def main(filename):
     players_list = Listbox(players_frame,listvariable=players,width=25,height=15)
     players_list.place(x=10,y=30)
 
+
+    order_by_players_frame = ["LASTNAME","FIRSTNAME"]
+    players_frame_sorting = StringVar()
+    players_frame_sorting.trace("w",alphabetical_order)
+    order_by_alphabetical = ttk.Combobox(players_frame,values=order_by_players_frame,width=20,state="readonly",textvariable=players_frame_sorting)
+    order_by_alphabetical.set("PICK A SORTING OPTION")
+    order_by_alphabetical.place(x=190,y=30)
     
     add_player_button = Button(players_frame,text="ADD A PLAYER",command=add_player,width=35,bg="white",fg="black",activebackground="white",activeforeground="black")
     add_player_button.place(x=370,y=50)
@@ -224,10 +240,10 @@ def main(filename):
     rank_frame = LabelFrame(gui,width=295,height=200,text="RANKING")
     rank_frame.place(x=700,y=0)
     
-    order_by = ["ASCENDING","DESCENDING"]
+    order_by_rank_frame = ["ASCENDING","DESCENDING"]
     order_by_menu_value = StringVar()
     order_by_menu_value.trace('w',change_order)
-    order_by_menu = ttk.Combobox(rank_frame,values=order_by,width=13,state="readonly",textvariable=order_by_menu_value)
+    order_by_menu = ttk.Combobox(rank_frame,values=order_by_rank_frame,width=13,state="readonly",textvariable=order_by_menu_value)
     order_by_menu.set("PICK AN OPTION")
     order_by_menu.place(x=5,y=10)
 
