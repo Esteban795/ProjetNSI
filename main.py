@@ -196,16 +196,16 @@ def main(filename):
 
     
     add_player_button = Button(players_frame,text="ADD A PLAYER",command=add_player,width=35,bg="white",fg="black",activebackground="white",activeforeground="black")
-    add_player_button.place(x=220,y=50)
+    add_player_button.place(x=370,y=50)
 
     remove_player_button = Button(players_frame,text="REMOVE SELECTED PLAYER",command=remove_player,width=35,bg="white",fg="black",activebackground="white",activeforeground="black")
-    remove_player_button.place(x=220,y=80)
+    remove_player_button.place(x=370,y=80)
 
     modify_infos_button = Button(gui,text="MODIFY SELECTED PLAYER'S INFORMATIONS",command=modify_infos,width=35,bg="white",fg="black",activebackground="white",activeforeground="black")
-    modify_infos_button.place(x=225,y=125)
+    modify_infos_button.place(x=377,y=125)
 
     remove_all_player_button = Button(players_frame,text="REMOVE ALL PLAYERS",command=remove_all_players,width=35,bg="white",fg="black",activebackground="white",activeforeground="black")
-    remove_all_player_button.place(x=215,y=190)
+    remove_all_player_button.place(x=370,y=190)
 
 
     #######
