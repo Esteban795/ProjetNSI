@@ -18,14 +18,13 @@ class Tournoi:
 
     def premier_tour(self):
         l = len(self.players_list)
-        sorted_by_rank = sorted(self.players_list,key=lambda player: player.classement)
+        sorted_by_rank = sorted(self.players_list,key=lambda player: player["rank"])
         mid = int(l//2)
         sup = sorted_by_rank[:mid]
         inf = sorted_by_rank[mid:]
         liste_matchs = []
         for i in range(mid):
             match = Match(sup[i],inf[i])
-            match.resultat(int(input("Indiquez 1 si le joueur 1 a gagné le match, sinon 2. En cas d'égalité, 1/2 : ")))
             liste_matchs.append(match)
         tour = Round(liste_matchs)
         self.list_of_rounds.append(tour)
@@ -33,8 +32,6 @@ class Tournoi:
             joueur_perdant = "".join(["joueur",str(i.serialize()['perdant'])])
             self.players_who_lost.append(i.serialize()[joueur_perdant])
             self.players_list.remove(i.serialize()[joueur_perdant])
-        self.afficher_joueurs()
-        self.afficher_perdants()
         self.number_of_rounds -= 1
     
     def reste_tournoi(self):
