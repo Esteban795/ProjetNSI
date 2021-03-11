@@ -257,13 +257,16 @@ def main(filename):
     def start_tournament():
         if askokcancel("Validation","Are you sure you want to start the tournament ? You won't be able to add or remove players once the tournament started."):
             disable_players_buttons()
-            tournament.list_of_rounds = ["test"]
+            start_button.config(state="disabled")
 
     start_button = Button(gui,text="START THE TOURNAMENT",command=start_tournament)
     start_button.place(x=760,y=235)
     #Rounds
     def change_rounds_available():
         return ["Round {}".format(i + 1) for i in range(len(tournament.list_of_rounds))] if len(tournament.list_of_rounds) > 0 else ["No rounds available."]
+
+    def display_rounds():
+        pass
 
     rounds_frame = LabelFrame(gui,width=990,height=395,text="TOURNAMENT INFOS")
     rounds_frame.place(x=5,y=305)
@@ -274,10 +277,15 @@ def main(filename):
     rounds_selector = ttk.Combobox(rounds_frame,width=17,state="readonly",textvariable=selected_round,values=rounds_available)
     rounds_selector.set("SELECT A ROUND")
     rounds_selector.place(x=10,y=10)
+
+    rounds = StringVar()
+    display_rounds()
+    rounds_viewer = Listbox(rounds_frame,width=75,height=15,listvariable=rounds)
+    rounds_viewer.place(x=10,y=30)
     ##########
     on_opening()
     gui.protocol("WM_DELETE_WINDOW", on_closing)
     gui.mainloop()
 
 x = "Tournoi_du_Mans.json"
-main(x)
+#main(x)
